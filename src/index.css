@@ -1,14 +1,66 @@
 @import "tailwindcss";
 
+body {
+  background-color: #e4e4e4;
+}
+
+@theme {
+  --color-brand: #1f3a9d;
+}
+
+/* Neon gradient border for nav items */
+.neon-card {
+  position: relative;
+  border-radius: 12px; /* matches rounded-xl */
+  isolation: isolate; /* ensure pseudo elements layer correctly */
+}
+.neon-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px; /* border thickness */
+  background: linear-gradient(135deg,
+    #ff2bd1 0%,
+    #6a00ff 25%,
+    #00d1ff 50%,
+    #f9b401 75%,
+    #ff2bd1 100%
+  );
+  background-size: 300% 300%;
+  -webkit-mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+  transition: opacity 300ms ease, filter 300ms ease, background-position 400ms ease;
+  z-index: -1; /* behind content */
+}
+
+@keyframes neon-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.neon-card:hover::before,
+.neon-card:focus-visible::before,
+.neon-card[aria-current="page"]::before {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.25));
+  animation: neon-shift 4s ease-in-out infinite;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,6 +71,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  color: hsl(var(--fg));
+  background-color: hsl(var(--bg));
 }
 
 html,

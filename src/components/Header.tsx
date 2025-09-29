@@ -13,14 +13,14 @@ export default function Header({ className, hasUnreadNotifications = true }: Hea
   return (
     <motion.header
       className={cn(
-        'sticky top-0 z-40 h-16 w-full bg-blue-800 shadow-sm',
+        'sticky top-0 z-40 h-[60px] w-full bg-[hsl(var(--accent))] shadow-sm mb-4',
         className,
       )}
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, ease: 'easeOut' }}
     >
-      <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-4">
+      <div className="flex h-full w-full items-center justify-between px-6">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <img src={logo} alt="X-MED" className="h-8 w-auto" />
@@ -28,7 +28,7 @@ export default function Header({ className, hasUnreadNotifications = true }: Hea
         </div>
 
         {/* Search */}
-        <div className="flex flex-1 justify-center px-4">
+        <div className="flex flex-1 justify-center">
           <div className="w-full max-w-[420px] flex-1 sm:max-w-[320px] md:max-w-[360px] lg:max-w-[420px]">
             <Input
               type="search"

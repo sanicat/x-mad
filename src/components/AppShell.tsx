@@ -1,44 +1,47 @@
 import type { ReactNode } from 'react'
+import { cn } from './ui/utils'
 import Header from './Header'
 
-interface AppShellProps {
+export interface AppShellProps {
   iconRail?: ReactNode
   sidebar?: ReactNode
-  topbar?: ReactNode
   children: ReactNode
+  className?: string
 }
 
-// Non-intrusive app shell. Does not modify global styles; purely local layout.
-export function AppShell({ iconRail, sidebar, topbar, children }: AppShellProps) {
+export default function AppShell({ iconRail, sidebar, children, className }: AppShellProps) {
   return (
-    <div className="min-h-dvh w-full bg-[hsl(var(--bg))] text-[hsl(var(--fg))]">
+    <div className={cn('min-h-screen bg-[hsl(var(--bg))] text-[hsl(var(--fg))]', className)}>
+      {/* Top Header */}
       <Header />
-      <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8">
-        {/* Top Bar */}
-        {topbar && (
-          <div className="sticky top-16 z-10 mb-4 bg-[hsl(var(--bg))]">
-            {topbar}
-          </div>
-        )}
-
-        {/* Main 3-column frame: icon rail | sidebar | content */}
-        <div className="grid grid-cols-[auto_auto_1fr] gap-4">
-          {/* Icon rail: hidden on small screens; can be moved to a Sheet later */}
-          <aside aria-label="Primary navigation" className="hidden sm:block">
+      
+      {/* Layout: Icon rail (sticky) + content area */}
+      <div className="flex min-h-[calc(100vh-60px)]">
+        {/* Icon rail */}
+        {iconRail ? (
+          <div className="sticky left-0 top-[60px] z-20 h-[calc(100vh-60px)] shrink-0">
             {iconRail}
-          </aside>
+          </div>
+        ) : null}
 
-          {/* Project sidebar: hidden on small screens; can be toggled later */}
-          <aside aria-label="Project list" className="hidden md:block">
-            {sidebar}
-          </aside>
+        {/* Content area */}
+        <div className="flex min-h-[calc(100vh-60px)] flex-1">
+          {/* Sidebar (hide on small screens) */}
+          {sidebar ? (
+            <aside className="sticky left-0 top-[60px] h-[calc(100vh-60px)] overflow-y-auto hidden md:block shrink-0 p-4">
+              {sidebar}
+            </aside>
+          ) : null}
 
-          {/* Main content */}
-          <main className="min-w-0">{children}</main>
+          {/* Main routed content - scrollable */}
+          <main className="min-w-0 flex-1 overflow-y-auto p-4">
+            {children}
+          </main>
         </div>
       </div>
     </div>
   )
 }
 
-export default AppShell
+export { AppShell }
+
