@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import { cn } from './ui/utils'
 import Header from './Header'
 
@@ -10,6 +11,8 @@ export interface AppShellProps {
 }
 
 export default function AppShell({ iconRail, sidebar, children, className }: AppShellProps) {
+  const { pathname } = useLocation()
+  const showSidebar = !!sidebar && pathname.startsWith('/works')
   return (
     <div className={cn('min-h-screen bg-[hsl(var(--bg))] text-[hsl(var(--fg))]', className)}>
       {/* Top Header */}
@@ -27,7 +30,7 @@ export default function AppShell({ iconRail, sidebar, children, className }: App
         {/* Content area */}
         <div className="flex min-h-[calc(100vh-60px)] flex-1">
           {/* Sidebar (hide on small screens) */}
-          {sidebar ? (
+          {showSidebar ? (
             <aside className="sticky left-0 top-[60px] h-[calc(100vh-60px)] overflow-y-auto hidden md:block shrink-0 p-4">
               {sidebar}
             </aside>

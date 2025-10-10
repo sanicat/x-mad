@@ -17,12 +17,17 @@ function Avatar({ m }: { m: Member }) {
       src={m.avatarUrl || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><rect width=%2240%22 height=%2240%22 fill=%22%231f3a9d%22/></svg>'}
       alt={alt}
       className="h-8 w-8 rounded-full border-2 border-white object-cover shadow-sm ring-transparent hover:ring-2 hover:ring-[#1f3a9d]"
+      loading="lazy"
+      decoding="async"
+      width={32}
+      height={32}
+      sizes="32px"
       onError={(e) => {
         const img = e.currentTarget
         if (!img.dataset.fallback) {
           img.dataset.fallback = '1'
           const BASE = (import.meta as any).env?.BASE_URL ?? '/'
-          img.src = `${BASE}users_profile/default.jpg`
+          img.src = `${BASE}users_profile/default.svg`
         }
       }}
     />

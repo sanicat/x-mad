@@ -26,6 +26,19 @@ function TinyAvatars({ people }: { people: Member[] }) {
           src={m.avatarUrl || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><rect width=%2240%22 height=%2240%22 fill=%22%231f3a9d%22/></svg>'}
           alt={m.name}
           className="h-6 w-6 rounded-full border-2 border-white object-cover shadow-sm"
+          loading="lazy"
+          decoding="async"
+          width={24}
+          height={24}
+          sizes="24px"
+          onError={(e) => {
+            const img = e.currentTarget
+            if (!img.dataset.fallback) {
+              img.dataset.fallback = '1'
+              const BASE = (import.meta as any).env?.BASE_URL ?? '/'
+              img.src = `${BASE}users_profile/default.svg`
+            }
+          }}
         />
       ))}
       {people.length > 3 && (

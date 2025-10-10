@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import './App.css'
 import Dashboard from './pages/Dashboard'
-import Works from './pages/Works'
+// Works page routed to MyProjectsActive; legacy component not used here
+import MyProjectsActive from './pages/projects/MyProjectsActive'
 import Projects from './pages/Projects'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
@@ -24,8 +25,9 @@ function App() {
         {/* Default redirect */}
         <Route index element={<Navigate to="works" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="works" element={<Works />} />
+        <Route path="works" element={<MyProjectsActive />} />
         <Route path="projects" element={<Projects />} />
+        <Route path="projects/active" element={<MyProjectsActive />} />
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
         <Route path="project/:id" element={<ProjectDetails />} />

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, useCallback } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import ProjectHeader from '../../components/project/ProjectHeader'
@@ -6,6 +6,7 @@ import ViewSwitcher, { type ViewKey } from '../../components/project/ViewSwitche
 import BoardView from '../../components/project/board/BoardView'
 import ListView from '../../components/project/list/ListView'
 import CalendarView from '../../components/project/calendar/CalendarView'
+import CommentsView from '../../components/project/comments/CommentsView'
 import type { Member, Project, Task } from '../../components/project/types'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '../../components/ui/button'
@@ -133,6 +134,13 @@ export default function ProjectDetails() {
     if (canNext) setPage((p) => Math.min(totalPages - 1, p + 1))
   }
 
+  // Stable callback to avoid re-creating a new function each render which
+  // can cause BoardView's effect to fire and set state on every render
+  const handlePageInfo = useCallback(({ current, total }: { current: number; total: number }) => {
+    setPage(current)
+    setTotalPages(total)
+  }, [])
+
   return (
     <div className="grid gap-4 overflow-x-hidden">
       <ProjectHeader project={project} activeTab={activeTab} onTabChange={setActiveTab} showTabs={false} />
@@ -186,27 +194,39 @@ export default function ProjectDetails() {
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
-          <ViewSwitcher value={view} onChange={onChangeView} />
+          {activeTab === 'tasks' && (
+            <ViewSwitcher value={view} onChange={onChangeView} />
+          )}
         </div>
       </div>
 
-      <motion.div key={view} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
-        {view === 'board' && (
-          <BoardView
-            tasks={tasks}
-            onOpenTask={onOpenTask}
-            outerRef={(el: HTMLDivElement | null) => {
-              boardRef.current = el
-            }}
-            externalPage={page}
-            onPageInfo={({ current, total }) => {
-              setPage(current)
-              setTotalPages(total)
-            }}
-          />
+      <motion.div key={activeTab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
+        {activeTab === 'tasks' && (
+          <>
+            {view === 'board' && (
+              <BoardView
+                tasks={tasks}
+                onOpenTask={onOpenTask}
+                outerRef={(el: HTMLDivElement | null) => {
+                  boardRef.current = el;
+                }}
+                externalPage={page}
+                onPageInfo={handlePageInfo}
+              />
+            )}
+            {view === 'list' && <ListView tasks={tasks} onOpenTask={onOpenTask} />}
+            {view === 'calendar' && <CalendarView tasks={tasks} onOpenTask={onOpenTask} />}
+          </>
         )}
-        {view === 'list' && <ListView tasks={tasks} onOpenTask={onOpenTask} />}
-        {view === 'calendar' && <CalendarView tasks={tasks} onOpenTask={onOpenTask} />}
+        {activeTab === 'comments' && <CommentsView />}
+        {activeTab === 'incident' && (
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6">Incident</h2>
+            <div className="bg-white rounded-lg shadow p-6">
+              <p className="text-gray-500">Incident details will be displayed here.</p>
+            </div>
+          </div>
+        )}
       </motion.div>
     </div>
   )

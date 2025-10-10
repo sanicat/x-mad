@@ -8,7 +8,7 @@ function IconRail() {
   const navItems = [
     { key: 'dashboard', label: 'Dashboard', to: '/dashboard', icon: LayoutGrid },
     { key: 'works', label: 'My Works', to: '/works', icon: FolderClosed },
-    { key: 'projects', label: 'My Projects', to: '/projects', icon: CalendarDays },
+    { key: 'projects', label: 'My Projects', to: '/projects/active', icon: CalendarDays },
     { key: 'reports', label: 'Reports', to: '/reports', icon: BarChart3 },
     { key: 'settings', label: 'Settings', to: '/settings', icon: Settings },
   ]
