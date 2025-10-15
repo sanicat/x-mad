@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProjectsSearch } from '../../components/projects/ProjectsSearch';
 import { NewProjectButton } from '../../components/projects/NewProjectButton';
 import { ProjectsGrid } from '../../components/projects/ProjectsGrid';
@@ -40,6 +41,7 @@ function makeProject(id: number, members: Member[], overrides: Partial<ProjectSu
 }
 
 export default function MyProjectsActive() {
+  const navigate = useNavigate();
   const members = useMockMembers();
   const [query, setQuery] = useState('');
   const [items, setItems] = useState<ProjectSummary[]>(() => Array.from({ length: 6 }).map((_, i) => makeProject(i + 1, members)));
@@ -54,8 +56,7 @@ export default function MyProjectsActive() {
   }, [items, query]);
 
   function onOpenProject(id: string) {
-    // integrate route later: navigate(`/project/${id}`)
-    console.log('open project', id);
+    navigate(`/project/${id}/details`);
   }
 
   function onCreateProject() {

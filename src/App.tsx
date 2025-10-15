@@ -10,6 +10,7 @@ import AppShell from './components/AppShell'
 import IconRail from './components/IconRail'
 import ProjectSidebar from './components/ProjectSidebar'
 import ProjectDetails from './pages/project/ProjectDetails'
+import ProjectDetailsPage from './pages/project/ProjectDetailsPage'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
         <Route path="project/:id" element={<ProjectDetails />} />
+        <Route path="project/:id/details" element={<ProjectDetailsPage />} />
         {/* Fallback */}
         <Route path="*" element={<Navigate to="works" replace />} />
       </Route>
